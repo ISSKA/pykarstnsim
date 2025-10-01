@@ -884,12 +884,6 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
            py::arg("water_table_surfaces"), py::arg("refine"))
       .def("set_topo_surface", &KarsticNetwork::set_topo_surface,
            py::arg("topographic_surface"))
-      // Safe ownership-preserving variant: copies the surface and stores it so
-      // the pointer remains valid.
-      .def(
-          "set_topo_surface", &KarsticNetwork::set_topo_surface,
-          py::arg("topographic_surface"),
-          R"doc(Safe version of set_topo_surface that preserves lifetime of the passed Surface.)doc")
       .def("set_ghost_rocks", &KarsticNetwork::set_ghost_rocks, py::arg("grid"),
            py::arg("ikp"), py::arg("alteration_lines"),
            py::arg("interpolate_lines"), py::arg("ghostrock_max_vertical_size"),
@@ -898,12 +892,6 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
       .def("set_inception_horizons_parameters",
            &KarsticNetwork::set_inception_horizons_parameters,
            py::arg("horizons"), py::arg("weight"))
-      // Safe ownership-preserving variant for inception horizons vector.
-      .def(
-          "set_inception_horizons_parameters",
-          &KarsticNetwork::set_inception_horizons_parameters,
-          py::arg("horizons"), py::arg("weight"),
-          R"doc(Safe version copying the horizons vector to ensure it lives for the duration of the network.)doc")
       .def("disable_inception_horizon",
            &KarsticNetwork::disable_inception_horizon)
       .def("set_karstification_potential_parameters",

@@ -55,15 +55,33 @@ target_include_directories(pykarstnsim_core PRIVATE ${KARSTNSIM_PATH}/KarstNSim/
 set(PYKARSTNSIM_STUB_OUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/stubs)
 set(PYKARSTNSIM_STUB_PYI ${PYKARSTNSIM_STUB_OUT_DIR}/pykarstnsim_core.pyi)
 
-# Use PYTHON_EXECUTABLE from pybind11, which points to the build environment Python
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+
+if(WIN32)
+    set(PYKARSTNSIM_PYTHONPATH_SEPARATOR ";")
+else()
+    set(PYKARSTNSIM_PYTHONPATH_SEPARATOR ":")
+endif()
+
+# add both the build directory and any existing PYTHONPATH to the PYTHONPATH used for stub generation
+set(PYKARSTNSIM_EXISTING_PYTHONPATH "$ENV{PYTHONPATH}")
+if(PYKARSTNSIM_EXISTING_PYTHONPATH)
+    set(PYKARSTNSIM_STUBGEN_PYTHONPATH
+        "$<TARGET_FILE_DIR:pykarstnsim_core>${PYKARSTNSIM_PYTHONPATH_SEPARATOR}${PYKARSTNSIM_EXISTING_PYTHONPATH}")
+else()
+    set(PYKARSTNSIM_STUBGEN_PYTHONPATH "$<TARGET_FILE_DIR:pykarstnsim_core>")
+endif()
+
+# pybind11_stubgen is available, generate stubs
 add_custom_command(TARGET pykarstnsim_core POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${PYKARSTNSIM_STUB_OUT_DIR}
     COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=$<TARGET_FILE_DIR:pykarstnsim_core>
-            ${PYTHON_EXECUTABLE} -m pybind11_stubgen pykarstnsim_core -o ${PYKARSTNSIM_STUB_OUT_DIR}
-    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/fix_typings.py ${PYKARSTNSIM_STUB_PYI}
+            PYTHONPATH=${PYKARSTNSIM_STUBGEN_PYTHONPATH}
+            ${Python3_EXECUTABLE} -m pybind11_stubgen pykarstnsim_core -o ${PYKARSTNSIM_STUB_OUT_DIR}
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/fix_typings.py ${PYKARSTNSIM_STUB_PYI}
     BYPRODUCTS ${PYKARSTNSIM_STUB_PYI}
     COMMENT "Generating .pyi stubs for pykarstnsim_core"
+    VERBATIM
 )
 
 # Install the Python extension and stubs

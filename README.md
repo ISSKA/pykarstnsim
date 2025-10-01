@@ -34,16 +34,16 @@ If you use this package, please cite the original KarstNSim publication:
 
 ## Installation
 
+### Using [uv](https://docs.astral.sh/uv/) (recommended)
+
 ```bash
-pip install pykarstnsim
+uv add git+https://github.com/ISSKA/pykarstnsim.git
 ```
 
-For development installation:
+### Using pip
 
 ```bash
-git clone https://github.com/ISSKA/pykarstnsim.git
-cd pykarstnsim
-pip install -e .
+pip install git+https://github.com/ISSKA/pykarstnsim.git
 ```
 
 ## Usage
@@ -62,6 +62,26 @@ For detailed information about:
 
 - Python >= 3.9
 - NumPy >= 2.0.2
+
+## Contributing
+
+Contributions are welcome! To set up a development environment:
+
+### Using uv (recommended)
+
+```bash
+git clone https://github.com/ISSKA/pykarstnsim.git
+cd pykarstnsim
+uv sync
+```
+
+### Using pip
+
+```bash
+git clone https://github.com/ISSKA/pykarstnsim.git
+cd pykarstnsim
+pip install -e .
+```
 
 ## License
 
