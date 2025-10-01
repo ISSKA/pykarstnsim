@@ -51,19 +51,17 @@ set_property(TARGET karstnsim_objs PROPERTY POSITION_INDEPENDENT_CODE ON)
 pybind11_add_module(pykarstnsim_core karstnsim_bindings.cpp $<TARGET_OBJECTS:karstnsim_objs>)
 target_include_directories(pykarstnsim_core PRIVATE ${KARSTNSIM_PATH}/KarstNSim/include)
 
-# Find a Python interpreter to run stub generation
-find_package(Python3 COMPONENTS Interpreter REQUIRED)
-
 # Generate .pyi stubs for the built extension and install them into the wheel
 set(PYKARSTNSIM_STUB_OUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/stubs)
 set(PYKARSTNSIM_STUB_PYI ${PYKARSTNSIM_STUB_OUT_DIR}/pykarstnsim_core.pyi)
 
+# Use PYTHON_EXECUTABLE from pybind11, which points to the build environment Python
 add_custom_command(TARGET pykarstnsim_core POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${PYKARSTNSIM_STUB_OUT_DIR}
     COMMAND ${CMAKE_COMMAND} -E env
             PYTHONPATH=$<TARGET_FILE_DIR:pykarstnsim_core>
-            ${Python3_EXECUTABLE} -m pybind11_stubgen pykarstnsim_core -o ${PYKARSTNSIM_STUB_OUT_DIR}
-    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/fix_typings.py ${PYKARSTNSIM_STUB_PYI}
+            ${PYTHON_EXECUTABLE} -m pybind11_stubgen pykarstnsim_core -o ${PYKARSTNSIM_STUB_OUT_DIR}
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/fix_typings.py ${PYKARSTNSIM_STUB_PYI}
     BYPRODUCTS ${PYKARSTNSIM_STUB_PYI}
     COMMENT "Generating .pyi stubs for pykarstnsim_core"
 )
