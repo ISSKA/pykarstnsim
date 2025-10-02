@@ -11,17 +11,25 @@ set(CMAKE_BUILD_PARALLEL_LEVEL ${NPROC})
 find_package(pybind11 CONFIG REQUIRED)
 
 # Fetch library
-include(FetchContent)
-FetchContent_Declare(
-    karstnsim_repo
-    GIT_REPOSITORY https://github.com/ISSKA/KarstNSim_Public.git
-    GIT_TAG e1ebb934aef749fa5ac87f935e94c92e4ecefb8f
-)
-FetchContent_GetProperties(karstnsim_repo)
-if (NOT karstnsim_repo_POPULATED)
-    FetchContent_Populate(karstnsim_repo)
+# Set KARSTNSIM_LOCAL_PATH to use a local clone instead of fetching from git
+# e.g., cmake -DKARSTNSIM_LOCAL_PATH=/path/to/KarstNSim_Public ..
+if(DEFINED KARSTNSIM_LOCAL_PATH)
+    message(STATUS "Using local KarstNSim from: ${KARSTNSIM_LOCAL_PATH}")
+    set(KARSTNSIM_PATH ${KARSTNSIM_LOCAL_PATH})
+else()
+    message(STATUS "Fetching KarstNSim from git repository")
+    include(FetchContent)
+    FetchContent_Declare(
+        karstnsim_repo
+        GIT_REPOSITORY https://github.com/ISSKA/KarstNSim_Public.git
+        GIT_TAG a2827f9d4d03a2fd3f125563580c05ccea3a48c1
+    )
+    FetchContent_GetProperties(karstnsim_repo)
+    if (NOT karstnsim_repo_POPULATED)
+        FetchContent_Populate(karstnsim_repo)
+    endif()
+    set(KARSTNSIM_PATH ${karstnsim_repo_SOURCE_DIR})
 endif()
-set(KARSTNSIM_PATH ${karstnsim_repo_SOURCE_DIR})
 
 #add_compile_options(-Wall -Wextra -pedantic)
 
