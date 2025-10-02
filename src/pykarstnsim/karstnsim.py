@@ -7,6 +7,7 @@ import pykarstnsim_core
 from pykarstnsim.config import KarstConfig
 from pykarstnsim.models import (
     ConnectivityMatrix,
+    KarstNSimResult,
     ProjectBox,
     Sink,
     Spring,
@@ -29,7 +30,7 @@ def run_simulation(
     waypoints: list[Waypoint] = [],
     sampling_points: list[pykarstnsim_core.Vector3] = [],
     previous_networks: list[pykarstnsim_core.Line] = [],
-) -> typing.Optional[pykarstnsim_core.KarstNetworkResult]:
+) -> typing.Optional[KarstNSimResult]:
     params = pykarstnsim_core.GeologicalParameters()
 
     # set seed to ensure reproducibility
@@ -181,7 +182,7 @@ def run_simulation(
 
     LOGGER.info("Starting karstification simulation...")
     with pykarstnsim_core.ostream_redirect():
-        return karst.run_simulation(
+        res = karst.run_simulation(
             sections_simulation_only=False,
             create_nghb_graph=config.create_nghb_graph,
             create_nghb_graph_property=config.create_nghb_graph_property,
@@ -198,3 +199,8 @@ def run_simulation(
             propdensity=project_box.density,
             propikp=project_box.karstification_potential,
         )
+        if res is None:
+            LOGGER.warning("Karstification simulation failed.")
+            return None
+    LOGGER.info("Karstification simulation completed.")
+    return KarstNSimResult(res)
