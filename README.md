@@ -1,6 +1,6 @@
 # PyKarstNSim
 
-A Python interface for the [KarstNSim](https://github.com/ring-team/KarstNSim_Public) C++ library, enabling graph-based and geologically-driven simulation of 3D karst networks directly from Python.
+A Python interface for the [KarstNSim](https://github.com/ring-team/KarstNSim_Public) C++ library, enabling graph-based and geologically-driven simulation of 3D karst networks directly from Python. This wrapper was developed by the [SISKA (Swiss Institute for Speleology and Karst Studies)](https://www.isska.ch).
 
 ## About
 
