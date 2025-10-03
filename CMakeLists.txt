@@ -22,7 +22,7 @@ else()
     FetchContent_Declare(
         karstnsim_repo
         GIT_REPOSITORY https://github.com/ISSKA/KarstNSim_Public.git
-        GIT_TAG a2827f9d4d03a2fd3f125563580c05ccea3a48c1
+        GIT_TAG 1f0455b92d0b77867ac84a8074767f96054c3670
     )
     FetchContent_GetProperties(karstnsim_repo)
     if (NOT karstnsim_repo_POPULATED)
