@@ -1,10 +1,10 @@
 # PyKarstNSim
 
-A Python interface for the [KarstNSim](https://github.com/ring-team/KarstNSim_Public) C++ library, enabling graph-based and geologically-driven simulation of 3D karst networks directly from Python. This wrapper was developed by the [SISKA (Swiss Institute for Speleology and Karst Studies)](https://www.isska.ch).
+A Python interface for the [KarstNSim](https://github.com/ring-team/KarstNSim_Public) C++ library, enabling graph-based and geologically-driven simulation of 3D karst networks directly from Python. This wrapper was developed by the [SISKA (Swiss Institute for Speleology and Karst Studies)](https://www.isska.ch) 
 
 ## About
 
-PyKarstNSim provides Python bindings to KarstNSim, a powerful tool for simulating realistic karst network geometries. This package is based on a [fork](https://github.com/ISSKA/KarstNSim_Public) of the original [KarstNSim_Public](https://github.com/ring-team/KarstNSim_Public) repository developed by the RING team. Both repositories are kept in sync on a best-effort basis.
+PyKarstNSim provides Python bindings to KarstNSim, a powerful tool for simulating realistic karst network geometries. This package is based on the  [KarstNSim_Public](https://github.com/ring-team/KarstNSim_Public) repository developed by the RING team.
 
 ### Credits
 
@@ -37,13 +37,13 @@ If you use this package, please cite the original KarstNSim publication:
 ### Using [uv](https://docs.astral.sh/uv/) (recommended)
 
 ```bash
-uv add git+https://github.com/ISSKA/pykarstnsim.git
+uv add pykarstnsim
 ```
 
 ### Using pip
 
 ```bash
-pip install git+https://github.com/ISSKA/pykarstnsim.git
+pip install pykarstnsim
 ```
 
 ## Usage
@@ -82,6 +82,10 @@ git clone https://github.com/ISSKA/pykarstnsim.git
 cd pykarstnsim
 pip install -e .
 ```
+
+## Maintainers
+
+PyKarstNSim is maintained by [ISSKA](https://www.isska.ch) and **Augustin Gouy** (a.gouy.proaddress@gmail.com), the original author of KarstNSim.
 
 ## License
 
