@@ -55,7 +55,7 @@ See the [pykarstnsim-demo](https://github.com/ISSKA/pykarstnsim-demo) repository
 For detailed information about:
 
 - **Simulation methodology**: See the [2024 publication](https://doi.org/10.1016/j.jhydrol.2024.130878) and [2025 thesis](https://hal.univ-lorraine.fr/tel-05114757v1)
-- **Input parameters and configuration**: Refer to the [config reference](https://github.com/ISSKA/KarstNSim_Public/blob/main/config_reference.md) in the C++ repository
+- **Input parameters and configuration**: Refer to the [config reference](https://github.com/ring-team/KarstNSim_Public/blob/main/config_reference.md) in the C++ repository
 - **Algorithm details**: Consult the full [KarstNSim documentation](https://github.com/ring-team/KarstNSim_Public)
 
 ## Requirements
