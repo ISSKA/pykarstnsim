@@ -21,8 +21,8 @@ else()
     include(FetchContent)
     FetchContent_Declare(
         karstnsim_repo
-        GIT_REPOSITORY https://github.com/ISSKA/KarstNSim_Public.git
-        GIT_TAG 1f0455b92d0b77867ac84a8074767f96054c3670
+        GIT_REPOSITORY https://github.com/ring-team/KarstNSim_Public.git
+        GIT_TAG bacd9560b44b7a4d28c9e3623b13a36b5566528c # KarstNSim 2.2
     )
     FetchContent_GetProperties(karstnsim_repo)
     if (NOT karstnsim_repo_POPULATED)

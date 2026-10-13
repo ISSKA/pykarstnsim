@@ -162,7 +162,11 @@ def run_simulation(
         gamma=config.gamma,
         multiply_costs=config.multiply_costs,
         vadose_cohesion=config.vadose_cohesion,
+        pred_update_interval=config.pred_update_interval,
+        vertical_distance_stretching_factor=config.vertical_distance_stretching_factor,
     )
+    karst.set_gradient_constraint_weight(config.gradient_constraint_weight)
+    karst.set_outlet_selection_cost_factor(config.outlet_selection_cost_factor)
 
     if config.simulate_sections:
         # TODO: add support for sections simulation in Python interface

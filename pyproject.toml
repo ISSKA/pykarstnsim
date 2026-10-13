@@ -1,6 +1,6 @@
 [project]
 name = "pykarstnsim"
-version = "1.0.1"
+version = "2.0.0"
 description = "A Python interface for the KarstNSim C++ library"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -33,7 +33,7 @@ dependencies = [
 Homepage     = "https://github.com/ISSKA/pykarstnsim"
 Repository   = "https://github.com/ISSKA/pykarstnsim"
 Issues       = "https://github.com/ISSKA/pykarstnsim/issues"
-Documentation = "https://github.com/ISSKA/KarstNSim_Public/blob/main/config_reference.md"
+Documentation = "https://github.com/ring-team/KarstNSim_Public/blob/main/config_reference.md"
 
 [build-system]
 requires = ["scikit-build-core>=0.10", "pybind11", "pybind11-stubgen"]
