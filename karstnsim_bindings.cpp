@@ -584,14 +584,23 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
           R"doc(Branch ID this point belongs to in the karst network.)doc")
       .def_readonly(
           "vadose_flag", &ResultPoint::vadose_flag,
-          R"doc(Flag indicating if the point is in the vadose zone (True) or phreatic zone (False).)doc")
+          R"doc(Legacy scalar: vadose flag of the first water-table channel (float). -99999 means no data. Prefer `vadose_flags`.)doc")
+      .def_readonly(
+          "vadose_flags", &ResultPoint::vadose_flags,
+          R"doc(Vadose/phreatic flags, one per physical water table (floats, -99999 = no data). Names are in KarstNetworkResult.vadose_property_names.)doc")
+      .def_readonly(
+          "external_drift", &ResultPoint::external_drift,
+          R"doc(External drift value at the point (-99999 if no drift was applied).)doc")
+      .def_readonly(
+          "kriging_weight", &ResultPoint::kriging_weight,
+          R"doc(Kriging/regression weight at the point (-99999 if no drift was applied).)doc")
       .def("__repr__", [](const ResultPoint &rp) {
         return "ResultPoint(p=" + std::to_string(rp.p.x) + "," +
                std::to_string(rp.p.y) + "," + std::to_string(rp.p.z) +
                ", cost=" + std::to_string(rp.cost) +
                ", eq_radius=" + std::to_string(rp.equivalent_radius) +
                ", branch_id=" + std::to_string(rp.branch_id) +
-               ", vadose=" + (rp.vadose_flag ? "True" : "False") + ")";
+               ", vadose_flag=" + std::to_string(rp.vadose_flag) + ")";
       });
 
   // ResultSegment
@@ -618,6 +627,12 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
       .def_readonly(
           "segments", &KarstNetworkResult::segments,
           R"doc(List of segments in the karst network result. Each segment contains start and end ResultPoint objects with detailed simulation properties.)doc")
+      .def_readonly(
+          "vadose_property_names", &KarstNetworkResult::vadose_property_names,
+          R"doc(Names of the exported vadose-flag properties, aligned with ResultPoint.vadose_flags.)doc")
+      .def_readonly(
+          "has_drift_properties", &KarstNetworkResult::has_drift_properties,
+          R"doc(True if external_drift and kriging_weight are meaningful.)doc")
       .def("to_string", &KarstNetworkResult::to_string,
            R"doc(Return a string summary of the KarstNetworkResult.)doc")
       .def("__repr__", [](const KarstNetworkResult &knr) {
@@ -888,7 +903,8 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
            py::arg("ikp"), py::arg("alteration_lines"),
            py::arg("interpolate_lines"), py::arg("ghostrock_max_vertical_size"),
            py::arg("use_max_depth_constraint"), py::arg("ghost_rock_weight"),
-           py::arg("max_depth_horizon"), py::arg("ghostrock_width"))
+           py::arg("max_depth_horizon"), py::arg("ghostrock_width"),
+           py::arg("paint_ikp") = true)
       .def("set_inception_horizons_parameters",
            &KarsticNetwork::set_inception_horizons_parameters,
            py::arg("horizons"), py::arg("weight"))
@@ -908,7 +924,9 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
            &KarsticNetwork::set_simulation_parameters, py::arg("nghb_count"),
            py::arg("use_max_nghb_radius"), py::arg("nghb_radius"),
            py::arg("poisson_radius"), py::arg("gamma"),
-           py::arg("multiply_costs"), py::arg("vadose_cohesion"))
+           py::arg("multiply_costs"), py::arg("vadose_cohesion"),
+           py::arg("pred_update_interval") = 1,
+           py::arg("vertical_distance_stretching_factor") = 1.0f)
       .def("set_domain_geometry", &KarsticNetwork::set_domain_geometry)
       .def("just_sampling", &KarsticNetwork::just_sampling)
       // std::mt19937 type from Python API (uses globalRng declared in
@@ -925,12 +943,6 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
           R"doc(Set noise parameters (rng handled internally).)doc")
       .def("create_sections", &KarsticNetwork::create_sections,
            py::arg("skeleton"))
-      .def("run_simulation_properties",
-           &KarsticNetwork::run_simulation_properties, py::arg("skeleton"),
-           py::arg("alteration_lines"), py::arg("use_ghost_rocks"),
-           py::arg("ghostrock_max_vertical_size"),
-           py::arg("use_max_depth_constraint"), py::arg("max_depth_horizon"),
-           py::arg("ghostrock_width"))
       .def(
           "run_simulation", &KarsticNetwork::run_simulation,
           py::arg("sections_simulation_only"), py::arg("create_nghb_graph"),
@@ -959,6 +971,14 @@ PYBIND11_MODULE(pykarstnsim_core, m) {
            py::arg("max_dist_loops_phreatic"), py::arg("loop_density_phreatic"))
       .def("set_water_table_weight", &KarsticNetwork::set_water_table_weight,
            py::arg("vadose_weight"), py::arg("phreatic_weight"))
+      .def("set_gradient_constraint_weight",
+           &KarsticNetwork::set_gradient_constraint_weight,
+           py::arg("gradient_constraint_weight"),
+           R"doc(Weight of the inlet-outlet elevation-drop penalty used when resolving ambiguous outlets.)doc")
+      .def("set_outlet_selection_cost_factor",
+           &KarsticNetwork::set_outlet_selection_cost_factor,
+           py::arg("outlet_selection_cost_factor"),
+           R"doc(Tolerance factor (>= 1) to keep ambiguous outlet paths close in cost to the best one.)doc")
       .def("disable_water_table", &KarsticNetwork::disable_water_table);
 
   // RNG

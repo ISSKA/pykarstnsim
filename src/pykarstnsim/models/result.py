@@ -41,8 +41,18 @@ class ResultPoint:
     p: Vector3
     """3D coordinates of the point (Vector3)."""
 
-    vadose_flag: bool
-    """Flag indicating if the point is in the vadose zone (True) or phreatic zone (False)."""
+    vadose_flag: float
+    """Legacy scalar: vadose flag of the first water table (float, -99999 means no data).
+    Prefer `vadose_flags`"""
+
+    vadose_flags: list[float]
+    """Vadose/phreatic flag for each physical water table (-99999 means no data)."""
+
+    external_drift: float
+    """External drift value at the point (-99999 if no drift was applied)."""
+
+    kriging_weight: float
+    """Kriging/regression weight at the point (-99999 if no drift was applied)."""
 
     @staticmethod
     def from_karstnsim_point(pt: pykarstnsim_core.ResultPoint) -> "ResultPoint":
@@ -52,6 +62,9 @@ class ResultPoint:
             equivalent_radius=pt.equivalent_radius,
             p=Vector3.from_karstnsim_vector(pt.p),
             vadose_flag=pt.vadose_flag,
+            vadose_flags=list(pt.vadose_flags),
+            external_drift=pt.external_drift,
+            kriging_weight=pt.kriging_weight,
         )
 
 

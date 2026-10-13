@@ -139,6 +139,14 @@ class KarstConfig:
     fraction_karst_perm: float = 0.9
     vadose_cohesion: bool = True
     multiply_costs: bool = False
+    pred_update_interval: int = 1
+    """Inlets processed between Pred cost-field updates. 1 = previous sequential behaviour; larger is faster."""
+    vertical_distance_stretching_factor: float = 1.0
+    """Vertical anisotropy for graph distances; large values favour horizontal conduits."""
+    gradient_constraint_weight: float = 0.0
+    """Weight of inlet-outlet elevation drop when resolving ambiguous outlets."""
+    outlet_selection_cost_factor: float = 1.0
+    """Tolerance factor (>= 1) to keep near-best ambiguous outlet paths."""
 
     # Save parameters
     create_vset_sampling: bool = False
