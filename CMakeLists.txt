@@ -22,7 +22,7 @@ else()
     FetchContent_Declare(
         karstnsim_repo
         GIT_REPOSITORY https://github.com/ring-team/KarstNSim_Public.git
-        GIT_TAG bacd9560b44b7a4d28c9e3623b13a36b5566528c # KarstNSim 2.2
+        GIT_TAG e1c2ebb7cc71a487a16ea2786222f86c6d07bffe
     )
     FetchContent_GetProperties(karstnsim_repo)
     if (NOT karstnsim_repo_POPULATED)
